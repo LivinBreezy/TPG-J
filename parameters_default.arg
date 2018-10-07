@@ -1,0 +1,13 @@
+seed=0
+teamPopSize=360
+teamGap=0.5
+probLearnerDelete=0.7
+probLearnerAdd=0.7
+probMutateAction=0.2
+probActionIsTeam=0.5
+maximumTeamSize=5
+maximumProgramSize=96
+probProgramDelete=0.5
+probProgramAdd=0.5
+probProgramSwap=1.0
+probProgramMutate=1.0
