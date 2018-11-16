@@ -1,9 +1,20 @@
 # TPG-J
-This is the most up-to-date repository for TPG-J. The current version is 0.9.1.
+This is the most up-to-date repository for TPG-J. The current version is v0.9.5.
 
-**UPDATE 11/16/2018: Updated sbbj_tpg.Learner.mutateAction(..) to properly decrement Teams if a Team pointer is mutated.**
+# UPDATE 11/16/2018: 
+   ### TPGLearn Code Changes
+   * TPGLearn.initializePopulations() now initializes the Team population to a size of TeamPopSize (was TeamPopSize/2).
+   * TPGLearn.initialize() does not use generateNewTeams() to fill out the Team population anymore.
+   * TPGLearn.nextEpoch() now calls  TPGLearn.cleanup() first to ensure Root Team population sanity.
+   ### Learner Code Changes
+   * Learner.Learner(long, Learner) constructor (used for cloning a Learner) now increments a cloned action's Team pointer when applicable.
+   * Learner.mutateAction(Action) now decrements a mutated action's Team pointer when applicable.
 
-API Functions:
+# Future Additions
+   * Include the ability to maintain a minimum number of root teams to avoid root teams fully subsuming. 
+   * Complete TPGPlay and TPGLearn.saveBest() so the best teams can be stored and tested later with minimal overhead.
+
+# API Functions:
 
 ## TPGAlgorithm
 
