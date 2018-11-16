@@ -1,4 +1,4 @@
-package sbbj_tpg;
+package tpg.code;
 
 import java.util.ArrayList;
 
@@ -110,8 +110,8 @@ public class Learner
 	{
 		// Make sure all the general purpose registers are set to 0.
 		// If you want to add simple memory, comment this for loop out!
-		for( int i=0; i < registers.length; i++ )
-			registers[i] = 0;
+		//for( int i=0; i < registers.length; i++ )
+		//	registers[i] = 0;
 		
 		// Use the Learner's program to generate a bid and return it.
 		// Uses the formula: bid = 1/(1+e^x), where x is the program output.
@@ -212,6 +212,10 @@ public class Learner
 		
 		// Store the new action in this Learner
 		this.action = action;
+		
+		// If we're placing a reference to a Team, make sure we dereference it
+		if( !a.isAtomic() )
+			a.team.decreaseReferences();
 		
 		// If the previous action and the new action are different, return true
 		return !a.equals(action);
