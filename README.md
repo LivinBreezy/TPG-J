@@ -1,5 +1,7 @@
 # TPG-J
-This is the most up-to-date repository for TPG-J. The current version is 0.9.
+This is the most up-to-date repository for TPG-J. The current version is 0.9.1.
+
+**UPDATE 11/16/2018: Updated sbbj_tpg.Learner.mutateAction(..) to properly decrement Teams if a Team pointer is mutated.**
 
 API Functions:
 
