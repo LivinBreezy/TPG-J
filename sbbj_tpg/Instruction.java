@@ -19,36 +19,36 @@ public class Instruction extends BitSet
 	/**
 	 * The number of bits to be contained within the binary string of an Instruction.
 	 */
-	public static final int INSTRUCTION_SIZE = 16 + 3 + 3 + 1;
+	public static final int INSTRUCTION_SIZE = 24 + 3 + 3 + 1;
 	
 	// Masks -- Apply before shifting
 	// Binary: 000 0000 0000 0000 0000 0001
 	/**
 	 * An instruction that represents the bits used to determine the mode area of
-	 * an instruction. The default value is 0x1 (000 0000 0000 0000 0000 0001).
+	 * an instruction. The default value is 0x1 (000 0000 0000 0000 0000 0000 0000 0001).
 	 */
 	public static final Instruction modeMask = new Instruction( 0x1 );   
 	
 	// Binary: 000 0000 0000 0000 0000 1110
 	/**
 	 * An instruction that represents the bits used to determine the operation area of
-	 * an instruction. The default value is 0xE (000 0000 0000 0000 0000 1110).
+	 * an instruction. The default value is 0xE (000 0000 0000 0000 0000 0000 0000 1110).
 	 */
 	public static final Instruction opMask = new Instruction( 0xE );     
 	
 	// Binary: 000 0000 0000 0000 0111 0000
 	/**
 	 * An instruction that represents the bits used to determine the mode area of
-	 * an instruction. The default value is 0x70 (000 0000 0000 0000 0111 0000).
+	 * an instruction. The default value is 0x70 (000 0000 0000 0000 0000 0000 0111 0000).
 	 */
 	public static final Instruction dstMask = new Instruction( 0x70 );   
 	
 	// Binary: 111 1111 1111 1111 1000 0000
 	/**
 	 * An instruction that represents the bits used to determine the source area of
-	 * an instruction. The default value is 0x7FFF80 (111 1111 1111 1111 1000 0000).
+	 * an instruction. The default value is 0x7FFFFF80 (111 1111 1111 1111 1111 1111 1000 0000).
 	 */
-	public static final Instruction srcMask = new Instruction( 0x7FFF80 ); 
+	public static final Instruction srcMask = new Instruction( 0x7FFFFF80 ); 
 
 	// Modes
 	// Rx <- op Rx Ry
@@ -82,7 +82,7 @@ public class Instruction extends BitSet
 	}
 	
 	/**
-	 * Creates a new instruction of a size defined by INSTRUCTION_SIZE with a value equal to the provided parameter..
+	 * Creates a new instruction of a size defined by INSTRUCTION_SIZE with a value equal to the provided parameter.
 	 * @param value the value to set this instruction to initially.
 	 */
 	public Instruction( int value )

@@ -1,4 +1,4 @@
-package tpg.code;
+package sbbj_tpg;
 
 import java.util.ArrayList;
 
@@ -103,6 +103,12 @@ public class Learner
 		// Copy the other Learner's program
 		for( Instruction in : other.program )
 			program.add( new Instruction(in) );
+		
+		// If the Learner we're copying is holding a pointer to a Team,
+		// we have to increment it here because this new Learner is
+		// also pointing to that Team.
+		if( !this.action.isAtomic() )
+			this.action.team.increaseReferences();
 	}
 	
 	// Calculate a bird from the feature set 

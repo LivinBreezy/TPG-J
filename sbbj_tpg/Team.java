@@ -227,7 +227,7 @@ public class Team implements Comparable<Team>
 	
 	// Decrease the number of references to this Team and return the new value
 	public int decreaseReferences()
-	{
+	{		
 		return --learnerReferenceCount;
 	}
 	

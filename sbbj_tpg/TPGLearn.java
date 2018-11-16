@@ -115,10 +115,7 @@ public class TPGLearn
 		// Create an initial population of Teams and Learners
 		if( !initializePopulations() ) 
 			return false;
-		
-		// Use the current population of Teams to create new offspring until we hit the required Team Population Size
-		generateNewTeams();
-		
+
 		// Create a new linked list to act as a queue for the remaining Teams to act
 		teamQueue = new LinkedList<Team>();
 		
@@ -127,7 +124,7 @@ public class TPGLearn
 				
 		// All the Teams are generated, so move to generation 0
 		epochs++;
-		
+
 		// Everything completed successfully; return true
 		return true;
 	}
@@ -142,20 +139,19 @@ public class TPGLearn
 		// Create a team and learner variable
 		Team team = null;
 		Learner learner = null;
-		
-		// 
-		int teamsToKeep = (int)(teamPopSize * teamGap);
+
+		int teamsToKeep = (int)teamPopSize;
 		
 		// Generate a number of teams equal to the keep threshold
 		for( int i=0; i < teamsToKeep; i++ )
 		{
 			// Get two different random actions
-			action1 = (long)(TPGAlgorithm.RNG.nextDouble() * getNumActions());
+			action1 = (long)(TPGAlgorithm.RNG.nextDouble() * actions.size());
 			
 			// Generate actions until action1 and action2 are different
 			do
 			{
-				action2 = (long)(TPGAlgorithm.RNG.nextDouble() * getNumActions());
+				action2 = (long)(TPGAlgorithm.RNG.nextDouble() * actions.size());
 			}
 			while( action1 == action2 );
 
@@ -164,25 +160,26 @@ public class TPGLearn
 			
 			// Create a Learner with the first action and add it to the Team
 			// as well as the Learner population.
-			learner = new Learner(-1, action1, maximumProgramSize );
+			learner = new Learner(-1, actions.get((int)action1), maximumProgramSize );
 			team.addLearner(learner);
 			learner.increaseReferences();
 			learners.add(learner);
 			
 			// Create a Learner with the second action and add it to the Team
 			// as well as the Learner population.
-			learner = new Learner(-1, action2, maximumProgramSize );
+			learner = new Learner(-1, actions.get((int)action1), maximumProgramSize );
 			team.addLearner(learner);
 			learner.increaseReferences();
 			learners.add(learner);
 			
 			// Since teams can be initialized with any number of Learners
 			// up to the maximumTeamSize, we randomize more here.
-			long learnerThreshold = (long)(TPGAlgorithm.RNG.nextDouble() * (maximumTeamSize-2));
+			//long learnerThreshold = (long)(TPGAlgorithm.RNG.nextDouble() * (maximumTeamSize-2));
+			long learnerThreshold = (long)maximumTeamSize-2;
 			
 			for( int j=0; j < learnerThreshold; j++ )
 			{
-				learner = new Learner(-1, (long)(TPGAlgorithm.RNG.nextDouble() * getNumActions()), maximumProgramSize);
+				learner = new Learner(-1, actions.get((int)(TPGAlgorithm.RNG.nextDouble() * actions.size())), maximumProgramSize);
 				team.addLearner(learner);
 				learner.increaseReferences();
 				learners.add(learner);
@@ -474,12 +471,12 @@ public class TPGLearn
 						
 						// Create a new Action with the Team as the action
 						action = new Action( actionTeam );
-						
+												
 						// Increase the references to this Team
-						actionTeam.increaseReferences();
+						actionTeam.increaseReferences();						
 					}
 					else
-						action = new Action( (long)(TPGAlgorithm.RNG.nextDouble() * getNumActions()) );
+						action = new Action( actions.get((int)(TPGAlgorithm.RNG.nextDouble() * actions.size())) );
 					
 					// Attempt to mutate the Learner's Action. If successful, mutateAction() returns true. False otherwise.
 					// If this Learner was changed earlier, OR it with the previous result to ensure it doesn't disappear.
@@ -566,7 +563,7 @@ public class TPGLearn
 			// Classically, SBB and TPG use pareto dominance to handle multiple dimensions, but there
 			// are other methods of handling this problem.
 		}
-				
+		
 		// Delete any Teams found in the deletion list
 		for( Team team : selectedForDeletion )
 		{
@@ -577,7 +574,7 @@ public class TPGLearn
 			teams.remove(team);
 			rootTeams.remove(team);
 		}
-		
+
 		// Force the outcome map to be flagged for garbage collection
 		outcomeMap = null;
 	}
@@ -609,13 +606,16 @@ public class TPGLearn
 	// Roll over to the next learning session
 	public long nextEpoch()
 	{
+		// Run the cleanup() method once to ensure everything is tidy
+		cleanup();
+		
 		// Clear the outcome maps of all Teams
 		for( Team team : teams )
 			team.outcomes.clear();
 		
 		// Clear the current root Team population
 		rootTeams.clear();
-		
+				
 		// If a Team has no references to it (aka an in-degree of zero), then it's a root Team
 		for( Team team : teams )
 			if( team.getReferences() == 0 )
@@ -624,10 +624,7 @@ public class TPGLearn
 		// Reset the Team queue and add all the root Teams to it
 		teamQueue.clear();
 		teamQueue.addAll(rootTeams);
-		
-		// Run the cleanup() method once to ensure everything is tidy
-		cleanup();
-		
+				
 		// The number of epochs increases and is returned
 		return ++epochs;
 	}
@@ -635,7 +632,7 @@ public class TPGLearn
 	// Save the current best model
 	public void saveBest()
 	{
-		// This requires the TPGPlay class, which I'll give you by the weekend.
+		// This requires the TPGPlay class, which is not yet complete
 	}
 	
 	// Print the current status of the TPG algorithm
@@ -654,7 +651,7 @@ public class TPGLearn
 		ArrayList<Team> rootCopy = new ArrayList<Team>(rootTeams);
 		
 		// Print some general information
-		System.out.println("Generation: " + epochs + ", Root Teams: " + rootTeams.size() + ", Labels: " + labels.size());
+		System.out.println("Generation: " + epochs + "\n\tRoot Teams: " + rootTeams.size() + ", Teams: " + teams.size() + ", \n\tLearners: " + learners.size() + ", Labels: " + labels.size());
 				
 		// Create an OpenDouble for holding outcome values
 		OpenDouble outcome = new OpenDouble(0.0);
@@ -698,11 +695,5 @@ public class TPGLearn
 	public long getEpochs()
 	{
 		return epochs;
-	}
-	
-	// Return the number of actions currently saved
-	public long getNumActions()
-	{
-		return actions.size();
 	}
 }
