@@ -28,8 +28,21 @@ public class Learner
 	// This Learner's program for calculating a bid based on an input
 	ArrayList<Instruction> program = new ArrayList<Instruction>();
 	
-	// Reconstruct a learner: we can build it, we have the technology
+	// Reconstruct a learner with an atomic action: we can build it, we have the technology
 	public Learner( long ID, long birthday, long action, int nRefs, ArrayList<Instruction> program )
+	{
+		this.ID = ID;
+		this.birthday = birthday;
+		this.action = new Action(action);
+		this.teamReferenceCount = nRefs;
+		this.program = program;
+		
+		// Initialize a new set of general purpose registers
+		registers = new double[REGISTERS];
+	}
+	
+	// Reconstruct a learner with a Team action: we can build it, we have the technology
+	public Learner( long ID, long birthday, Team action, int nRefs, ArrayList<Instruction> program )
 	{
 		this.ID = ID;
 		this.birthday = birthday;

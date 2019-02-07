@@ -162,14 +162,12 @@ public class TPGLearn
 			// as well as the Learner population.
 			learner = new Learner(-1, actions.get((int)action1), maximumProgramSize );
 			team.addLearner(learner);
-			learner.increaseReferences();
 			learners.add(learner);
 			
 			// Create a Learner with the second action and add it to the Team
 			// as well as the Learner population.
 			learner = new Learner(-1, actions.get((int)action1), maximumProgramSize );
 			team.addLearner(learner);
-			learner.increaseReferences();
 			learners.add(learner);
 			
 			// Since teams can be initialized with any number of Learners
@@ -181,7 +179,6 @@ public class TPGLearn
 			{
 				learner = new Learner(-1, actions.get((int)(TPGAlgorithm.RNG.nextDouble() * actions.size())), maximumProgramSize);
 				team.addLearner(learner);
-				learner.increaseReferences();
 				learners.add(learner);
 			}
 			
@@ -372,15 +369,7 @@ public class TPGLearn
 			// Retrieve the current Learner lists from the children
 			child1Learners.addAll(child1.getLearners());
 			child2Learners.addAll(child2.getLearners());
-			
-			// Child 1: Increase its Learners' references by 1 each
-			for( Learner l : child1Learners )
-				l.increaseReferences();
-			
-			// Child 2: Increase its Learners' references by 1 each			
-			for( Learner l : child2Learners )
-				l.increaseReferences();
-			
+
 			// Insert the new Teams into the Root Team population
 			rootTeams.add( child1 );
 			rootTeams.add( child2 );
@@ -466,8 +455,15 @@ public class TPGLearn
 					// Randomly choose between the Action being a Team or an Atomic
 					if( TPGAlgorithm.RNG.nextDouble() < probActionIsTeam )
 					{
-						// Grab a random Team from the list
-						Team actionTeam = teams.get((int)(TPGAlgorithm.RNG.nextDouble() * teams.size()));
+						// Create a variable for holding a random Team
+						Team actionTeam = null;
+						
+						// Grab a random Team from the list, making sure not to
+						// choose a root team if the root teams are too small
+						do
+						{
+							actionTeam = teams.get((int)(TPGAlgorithm.RNG.nextDouble() * teams.size()));
+						} while( rootTeams.size() <= 5 && rootTeams.contains(actionTeam) );
 						
 						// Create a new Action with the Team as the action
 						action = new Action( actionTeam );
@@ -689,6 +685,16 @@ public class TPGLearn
 	public int remainingTeams()
 	{
 		return teamQueue.size();
+	}
+	
+	public int getTeamCount()
+	{
+		return teams.size();
+	}
+	
+	public int getLearnerCount()
+	{
+		return learners.size();
 	}
 	
 	// Return the number of epochs (generations) passed

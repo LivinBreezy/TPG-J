@@ -80,6 +80,9 @@ public class Team implements Comparable<Team>
 		// It's not already in there, so add it
 		learners.add(learner);
 		
+		// Increase the reference count of this Learner
+		learner.increaseReferences();
+		
 		// Add successful; return true
 		return true;	
 	}
@@ -90,10 +93,15 @@ public class Team implements Comparable<Team>
 	// work this way. C'est la vie. 
 	public void removeLearner( Learner learner )
 	{
+		// If the requested Learner doesn't exist on this Team, something went wrong
 		if( !learners.contains(learner) )
 			throw new RuntimeException("The program tried to remove a Learner that does not exist.");
 		
-		learners.remove( learners.indexOf(learner) );
+		// Remove the Learner from the Team
+		learners.remove( learner );
+		
+		// Decrement the References of the Learner
+		learner.decreaseReferences();
 	}
 	
 	// Add this Team's Learners to a given list
