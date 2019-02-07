@@ -1,6 +1,13 @@
 # TPG-J
 This is the most up-to-date repository for TPG-J. The current version is v0.9.5.
 
+# UPDATE 2/7/2019: 
+   ### TPGLearn Code Changes
+   * TPGLearn.mutate() now ensures the number of root teams will never fall below 5.
+   * All instances of increments and decrements moved from TPGLearn to their respective objects' add/remove methods in the Team and Learner classes.
+   ### Learner Code Changes
+   * Learner.Learner(..) constructor for rebuilding a Learner is now overloaded, accepting either a long action or a Team action.
+
 # UPDATE 11/16/2018: 
    ### TPGLearn Code Changes
    * TPGLearn.initializePopulations() now initializes the Team population to a size of TeamPopSize (was TeamPopSize/2).
@@ -11,7 +18,7 @@ This is the most up-to-date repository for TPG-J. The current version is v0.9.5.
    * Learner.mutateAction(Action) now decrements a mutated action's Team pointer when applicable.
 
 # Future Additions
-   * Include the ability to maintain a minimum number of root teams to avoid root teams fully subsuming. 
+   * Add another parameter so that the minimum root teams can be set in the parameters file.
    * Complete TPGPlay and TPGLearn.saveBest() so the best teams can be stored and tested later with minimal overhead.
 
 # API Functions:
