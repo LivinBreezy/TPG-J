@@ -36,6 +36,14 @@ public class Team implements Comparable<Team>
 		this.learnerReferenceCount = 0;
 	}
 	
+	// Create a blank Team with the given ID, Birthday, and References.
+	public Team(long ID, long birthday, int references)
+	{
+		this.ID = ID;
+		this.birthday = birthday;
+		this.learnerReferenceCount = references;
+	}
+	
 	// Create a new Team and set its creation time
 	public Team( long birthday )
 	{
@@ -227,6 +235,33 @@ public class Team implements Comparable<Team>
 			learner.decreaseReferences();
 	}
 	
+	// Find every team attached to this team and return the complete set
+	public void findAllTeams(Set<Team> found)
+	{
+		// If we've already found this team, skip it and return.
+		if(found.contains(this))
+			return;
+		
+		// Otherwise add this team to the found set.
+		found.add(this);
+		
+		// Check the action of every Learner. If there is a Team reference,
+		// recursively call this method on it.
+		for(Learner learner: learners)
+		{
+			// Hold the action in a new variable for convenience
+			Action action = learner.getActionObject();
+			
+			// If the action is not atomic, it's a team reference, so
+			// make the resursive call here.
+			if(!action.isAtomic())
+				action.team.findAllTeams(found);
+		}
+		
+		// Explicit return when the process is complete.
+		return;
+	}
+	
 	// Increase the number of references to this Team and return the new value
 	public int increaseReferences()
 	{
@@ -257,6 +292,23 @@ public class Team implements Comparable<Team>
 		}
 		
 		return output;
+	}
+	
+	// Return a string representation of this Team,
+	// designed to be stored in a file.
+	public String storageOutput()
+	{
+		// Provide the basic Team information as the
+		// first line, followed by a single empty line
+		String out = ID + " " + birthday + " " + learnerReferenceCount + "\n\n";
+		
+		// For each Learner in this Team's learner list,
+		// store a Learner ID on its own line.
+		for( Learner L: learners )
+			out += L.getID() + "\n";
+		
+		// Return the representative string
+		return out;
 	}
 	
 	// Compare two Teams by key. 
@@ -292,4 +344,23 @@ public class Team implements Comparable<Team>
  			}
  		} );
  	}
+ 	
+ 	// Override of the Object.equals(Object) method.
+	public boolean equals(Object object) 
+	{
+		if( !(object instanceof Team) )
+			return false;
+		if( object == this )
+			return true;
+		
+		Team other = (Team)object;
+		return ID == other.ID;
+	}
+	
+	// Use the Long class technique for turning long values
+	// into hash values that fit in an int.
+	public int hashCode()
+	{
+		return (int)(ID^(ID>>>32));
+	}
 }

@@ -85,7 +85,7 @@ public class Instruction extends BitSet
 	 * Creates a new instruction of a size defined by INSTRUCTION_SIZE with a value equal to the provided parameter.
 	 * @param value the value to set this instruction to initially.
 	 */
-	public Instruction( int value )
+	public Instruction( long value )
 	{
 		super( INSTRUCTION_SIZE );
 		this.or( BitSet.valueOf( new long[]{value} ) );		

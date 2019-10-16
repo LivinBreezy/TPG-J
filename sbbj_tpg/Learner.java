@@ -324,5 +324,44 @@ public class Learner
 	public String toString()
 	{
 		return "[" + ID + " " + action + "]";
-	}	
+	}
+	
+	// Return a string representation of this Learner,
+	// designed to be stored in a file.
+	public String storageOutput()
+	{
+		// Provide the basic Learner information as the first line,
+		// followed by a single empty line
+		String out = ID + " " + birthday + " " + teamReferenceCount + " ";
+		out += (action.isAtomic() ? action.action : "T" + action.team.getID() );
+		out += "\n\n";
+		
+		// For each Instruction in this Learner's program list,
+		// store the long value representation of the Instruction
+		// on its own line.
+		for( Instruction I: program )
+			out += I.getLongValue() + "\n";
+		
+		// Return the representative string
+		return out;
+	}
+	
+ 	// Override of the Object.equals(Object) method.
+	public boolean equals(Object object) 
+	{
+		if( !(object instanceof Learner) )
+			return false;
+		if( object == this )
+			return true;
+		
+		Learner other = (Learner)object;
+		return ID == other.ID;
+	}
+	
+	// Use the Long class technique for turning long values
+	// into hash values that fit in an int.
+	public int hashCode()
+	{
+		return (int)(ID^(ID>>>32));
+	}
 }

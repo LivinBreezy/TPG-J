@@ -1,6 +1,11 @@
 package sbbj_tpg;
 
 import java.util.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class TPGLearn
 {
@@ -64,6 +69,10 @@ public class TPGLearn
 	// Random seed value from the parameters file
 	protected int seed = 0;
 
+	// Create a date format and store it for saving files later
+	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+	Date currentDate = new Date();
+	
 	// Given a map of arguments, initialize all the basic state values for the TPG algorithm
 	public TPGLearn( Map<String, String> arguments )
 	{
@@ -548,6 +557,9 @@ public class TPGLearn
 			// Rank the root Teams by their outcomes
 			Miscellaneous.sortTeamsBySingleOutcome( rootTeams, outcomeMap );			
 			
+			// Save the number one ranked Team to a file
+			saveBestTeam(rootTeams.get(0));
+			
 			// Since the Teams are ranked, starting at the index after the last Team to be kept, place the remaining Teams in the deletion list
 			for( int i=keep; i < rootTeams.size(); i++ )
 				selectedForDeletion.add( rootTeams.get(i) );
@@ -626,9 +638,81 @@ public class TPGLearn
 	}
 	
 	// Save the current best model
-	public void saveBest()
+	public void saveBestTeam(Team team)
 	{
-		// This requires the TPGPlay class, which is not yet complete
+		// Create a String for holding the folder name.
+		String folder = dateFormat.format(currentDate) + "_" + seed + "/generation_" + epochs + "/";
+		
+		// If the appropriate directory doesn't exist, create it.
+		if(!Files.isDirectory(Paths.get(folder)))
+			new File(folder).mkdirs();
+				
+		// Attempt to write the root team and the root team ID to the folder.
+		try
+		{
+			// Store the root team in its own file and note the ID in the root file.
+			File filePath = new File(folder + "root.txt");
+			FileWriter writer = new FileWriter(filePath);
+			writer.write("" + team.getID());
+			writer.close();
+			
+			// Create sets for holding unique teams and learners
+			HashSet<Team> teamSet = new HashSet<Team>();
+			HashSet<Learner> learnerSet = new HashSet<Learner>();
+			
+			// Recursively find all Teams attached to the current root team
+			team.findAllTeams(teamSet);
+			
+			// Add all of the learners from each discovered team to the 
+			// learner set. Since Learners and Teams have custom hashes
+			// and equals methods, no duplicates will be stored.
+			for(Team T: teamSet)
+				learnerSet.addAll(T.getLearners());
+			
+			// Store every Team in the team set to its own file. The team
+			// files are named team_#.txt, where # is the team's ID.
+			for(Team T: teamSet)				
+			{
+				filePath = new File(folder + "team_" + T.getID() + ".txt");
+				writer = new FileWriter(filePath);
+				writer.write(T.storageOutput());
+				writer.close();
+			}
+						
+			// Store every Learner in the learner set to its own file.
+			// The learner files are named learner_#.txt, where # is 
+			// the learner's ID.
+			for(Learner L: learnerSet)
+			{
+				filePath = new File(folder + "learner_" + L.getID() + ".txt");
+				writer = new FileWriter(filePath);
+				writer.write(L.storageOutput());
+				writer.close();
+			}
+			
+			// Store all of the team IDs in a teamIDs.txt file. The IDs
+			// are stored one per line. There is no guarantee of order.
+			filePath = new File(folder + "teamIDs.txt");
+			writer = new FileWriter(filePath);
+			for(Team T: teamSet)				
+				writer.write(T.getID() + "\n");
+			writer.close();
+			
+			// Store all of the learner IDs in a learnerIDs.txt file. 
+			// The IDs are stored one per line. There is no guarantee of order.
+			filePath = new File(folder + "learnerIDs.txt");
+			writer = new FileWriter(filePath);
+			for(Learner L: learnerSet)				
+				writer.write(L.getID() + "\n");
+			writer.close();						
+		} 
+		catch(IOException e) 
+		{
+			System.err.println(e); 
+		}
+		
+		// Explicit return to signify the end of the method.
+		return;
 	}
 	
 	// Print the current status of the TPG algorithm
@@ -687,11 +771,13 @@ public class TPGLearn
 		return teamQueue.size();
 	}
 	
+	// Return the total number of Teams in the Team population
 	public int getTeamCount()
 	{
 		return teams.size();
 	}
 	
+	// Return the total number of Learners in the Learner population	
 	public int getLearnerCount()
 	{
 		return learners.size();
