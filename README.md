@@ -32,7 +32,6 @@ This is the most up-to-date repository for TPG-J. The current version is v1.1.
 
 # Future Additions
    * Add another parameter so that the minimum root teams can be set in the parameters file.
-   * Complete TPGPlay and TPGLearn.saveBest() so the best teams can be stored and tested later with minimal overhead.
 
 # API Functions:
 
