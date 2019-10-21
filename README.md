@@ -1,6 +1,19 @@
 # TPG-J
-This is the most up-to-date repository for TPG-J. The current version is v0.9.5.
+This is the most up-to-date repository for TPG-J. The current version is v1.1.
 
+# UPDATE 10/16/2019:
+   ### Initial Release Version
+   * With this update, TPG-J has been pushed to version 1.0 and 1.1 for regular and memory respectively. 
+   ### TPGLearn Code Changes
+   * TPGLearn.saveBestTeam(..) added, which allows the algorithm to store the best Team every generation. Could be used to store any Team, although it may be more useful to set up a helper with a more descriptive name.
+   * In every generation, the TPGLearn.selection(..) method will now rank the Teams and store the best Team for that generation to a file. The run will be stored in a folder with a numerical date and the seed attached. There is a sample folder (16-10-2019-05-03-45_0) provided in the repository so you can see the directory and file structure.
+   ### Team and Learner Code Changes
+   * Teams and Learners have been given a hashCode() and equals() method to allow correct storage in Set objects.
+   * Team.storageOutput() and Learner.storageOutput() have been added to produce a string representation of the given object explicitly for storing the object in a file.
+   ### TPGPlay Code Changes
+   * TPGPlay should be fully functional. It requires a path to an existing Team, a sample of which is provided in the 16-10-2019-05-03-45_0 folder. The path is already included for TPGPlay by default, so the APIExecutionExample3 class should be able to execute the TPGPLay object without any changes.
+   ### TPG-MEM Added
+   * The memory model version of TPG-J was uploaded. It contains a memory matrix which all Learners have access to statically. Instructions have been updated to accomodate the new bit width, as the mode section and operation section have each grown by 1 bit. The Learners in TPG-MEM have been modified to better handle the new Instruction format. 
 # UPDATE 2/7/2019: 
    ### TPGLearn Code Changes
    * TPGLearn.mutate() now ensures the number of root teams will never fall below 5.
@@ -19,7 +32,6 @@ This is the most up-to-date repository for TPG-J. The current version is v0.9.5.
 
 # Future Additions
    * Add another parameter so that the minimum root teams can be set in the parameters file.
-   * Complete TPGPlay and TPGLearn.saveBest() so the best teams can be stored and tested later with minimal overhead.
 
 # API Functions:
 
