@@ -11,7 +11,7 @@ This is the most up-to-date repository for TPG-J. The current version is v1.1.
    * Teams and Learners have been given a hashCode() and equals() method to allow correct storage in Set objects.
    * Team.storageOutput() and Learner.storageOutput() have been added to produce a string representation of the given object explicitly for storing the object in a file.
    ### TPGPlay Code Changes
-   * TPGPlay should be fully functional. It requires a path to an existing Team, a sample of which is provided in the 16-10-2019-05-03-45_0 folder. The path is already included for TPGPlay by default, so the APIExecutionExample3 class should be able to execute the TPGPLay object without any changes.
+   * TPGPlay should be fully functional. It requires a path to an existing Team, a sample of which is provided in the 16-10-2019-05-03-45_0 folder. The path is already included for TPGPlay by default, so the APIExecutionExample3 class should be able to execute the TPGPlay object without any changes.
    ### TPG-MEM Added
    * The memory model version of TPG-J was uploaded. It contains a memory matrix which all Learners have access to statically. Instructions have been updated to accomodate the new bit width, as the mode section and operation section have each grown by 1 bit. The Learners in TPG-MEM have been modified to better handle the new Instruction format. 
 # UPDATE 2/7/2019: 
