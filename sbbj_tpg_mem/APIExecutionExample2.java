@@ -7,7 +7,7 @@ public class APIExecutionExample2
 		// Example Code execution when interacting with any API:
 
 		// Create a TPG instance with the parameters file and training flag
-		TPGAlgorithm tpgAlgorithm = new TPGAlgorithm("parameters.arg", "learn");
+		TPGAlgorithm tpgAlgorithm = new TPGAlgorithm("parameters.arg", null, "learn");
 
 		// Grab the TPG learning interface from the wrapper object
 		TPGLearn tpg = tpgAlgorithm.getTPGLearn();

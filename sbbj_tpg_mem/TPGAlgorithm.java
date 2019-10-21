@@ -19,17 +19,17 @@ public class TPGAlgorithm
 	protected TPGPlay tpgPlay = null;
 	
 	// Create a new TPGAlgorithm in Learn or Play mode
-	public TPGAlgorithm( String inputFile, String type )
+	public TPGAlgorithm( String argumentsFile, String modelFile, String type )
 	{
 		if( type.equals("learn") )
 		{
 			System.out.println("Starting TPG in Learning Mode.");
-			startLearning( inputFile );
+			startLearning( argumentsFile );
 		}
 		else if( type.equals("play") )
 		{
 			System.out.println("Starting TPG in Play Mode.");
-			startPlaying( inputFile );
+			startPlaying( argumentsFile, modelFile );
 		}
 		else
 			throw new RuntimeException("Uh, we had a slight input parameters malfunction, but uh... everything's perfectly all right now. We're fine. We're all fine here now, thank you. How are you?");
@@ -60,11 +60,25 @@ public class TPGAlgorithm
 	}
 	
 	// Start a Play session
-	public void startPlaying( String modelFile )
+	public void startPlaying( String argumentsFile, String modelFile )
 	{
+		// Create new data structures for storage
+		arguments = new HashMap<String, String>();
+		
+		// Set the procedure type to all before checking it
+		arguments.put("procedureType", "all");
+	
+		// Get the arguments
+		readArgumentsToMap( argumentsFile );
+				
 		// Set up the Memory Model to be 100x8
 		memory = new MemoryModel(100, 8);
 		
+		// Set the seed for the RNG
+		RNG = new Random( Integer.parseInt(arguments.get("seed")) );
+		if( Integer.valueOf(arguments.get("seed")) < 0 )
+			RNG = new Random( System.currentTimeMillis() );
+				
 		// Creates a new TPGPlay object. Does not need arguments or RNG.
 		tpgPlay = new TPGPlay(modelFile);
 	}

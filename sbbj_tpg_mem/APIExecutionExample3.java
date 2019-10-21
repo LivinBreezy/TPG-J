@@ -7,7 +7,7 @@ public class APIExecutionExample3
 		// Example Code execution when interacting with any API:
 
 		// Create a TPG instance with the parameters file and training flag
-		TPGAlgorithm tpgAlgorithm = new TPGAlgorithm("16-10-2019-05-03-45_0/generation_12/", "play");
+		TPGAlgorithm tpgAlgorithm = new TPGAlgorithm("parameters.arg", "16-10-2019-05-03-45_0/generation_12/", "play");
 
 		// Grab the TPG learning interface from the wrapper object
 		TPGPlay tpg = tpgAlgorithm.getTPGPlay();
@@ -20,7 +20,7 @@ public class APIExecutionExample3
 		double[] inputFeatures = null;
 		
 		// Create a variable for the number of iterations
-		int numberOfIterations = 5000; 
+		int numberOfIterations = 10; 
 		
 		// Keep a count of the number of games to play (learning dimensions)
 		int gamesToPlay = 1;
@@ -68,7 +68,7 @@ public class APIExecutionExample3
 			}
 			
 			// Print the total outcome. Why not?
-			System.out.println(finalOutcome);
+			System.out.println("Outcome at Test #" + (i+1) + ": " + finalOutcome);
 			
 			// Print some stats as defined by TPGPlay.
 			tpg.printStats(10);

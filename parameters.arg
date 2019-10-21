@@ -1,4 +1,4 @@
-seed=0
+seed=-1
 teamPopSize=36
 teamGap=0.5
 probLearnerDelete=0.7
