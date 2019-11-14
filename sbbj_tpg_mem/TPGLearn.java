@@ -370,14 +370,6 @@ public class TPGLearn
 				while( !mutate(epochs , child2) );
 			else
 				mutate(epochs, child2);
-			
-			// Empty the current child Learner lists
-			child1Learners.clear();
-			child2Learners.clear();
-			
-			// Retrieve the current Learner lists from the children
-			child1Learners.addAll(child1.getLearners());
-			child2Learners.addAll(child2.getLearners());
 
 			// Insert the new Teams into the Root Team population
 			rootTeams.add( child1 );
