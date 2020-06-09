@@ -38,7 +38,7 @@ public class Instruction extends BitSet
 	 * An instruction that represents the bits used to determine the mode area of
 	 * an instruction. The default value is 0x1C0 (0 0000 0000 0000 0000 0000 0001 1100 0000).
 	 */
-	public static final Instruction dstMask = new Instruction( 0x70 );   
+	public static final Instruction dstMask = new Instruction( 0x1c0 );   
 	
 	/**
 	 * An instruction that represents the bits used to determine the source area of
